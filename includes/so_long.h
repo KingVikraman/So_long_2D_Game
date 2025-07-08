@@ -6,6 +6,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include "../libft/gnl/get_next_line.h"
+
 
 typedef struct s_game
 {
@@ -23,7 +25,18 @@ typedef struct s_game
 	void	*img_wall;
 	void	*img_collect;
 	void	*img_exit;
+
 } t_game;
+
+void	free_map(char **map);
+int	parse_map(char *file, t_game *game);
+void	*ft_memset(void *b, int c, size_t len);
+
+
+int	validate_map(char **map, t_game *game);
+int	is_rectangular(char **map, int height, int width);
+int	is_surrounded_by_walls(char **map, int height, int width);
+int	validate_content(char **map, int height, t_game *game);
 
 
 #endif
