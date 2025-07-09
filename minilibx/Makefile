@@ -1,63 +1,68 @@
 #==================================================
-# CONSTANT
+# CONSTANTS
 #==================================================
-
-CC = gcc
-FLAG = -Wall -Werror -Wextra -O3 #-g3 -fsanitize=address
-RM = rm -f
+CC      = gcc
+CFLAGS  = -Wall -Werror -Wextra -O3 #-g3 -fsanitize=address
+RM      = rm -f
 
 #==================================================
-# DECLARATION
+# NAME
 #==================================================
+NAME    = cub3D
 
-NAME = cub3D
-INCLUDE = ./include/mlx/libmlx.a ./include/lib/libft.a
-MLX_FLAG = -L./include/mlx -lmlx -L/usr/lib/X11 -lXext -lX11 -lm -lz
-
+#==================================================
+# DIRECTORIES
+#==================================================
+INCLUDE_DIRS = -I./include -I./include/lib -I./include/mlx
 LIB_DIR = ./include/lib
 MLX_DIR = ./include/mlx
 
 #==================================================
+# LIBRARIES
+#==================================================
+INCLUDE_LIBS = ./include/mlx/libmlx.a ./include/lib/libft.a
+MLX_FLAGS = -L./include/mlx -lmlx -L/usr/lib/X11 -lXext -lX11 -lm -lz
+
+#==================================================
 # FILES
 #==================================================
-
 SRC = $(wildcard ./draw/*.c) \
-	$(wildcard ./game/*.c) \
-	$(wildcard ./init/*.c) \
-	$(wildcard ./render/*.c) \
-	$(wildcard ./utils/*.c) \
-	$(wildcard ./parse/*.c) \
-	
+      $(wildcard ./game/*.c) \
+      $(wildcard ./init/*.c) \
+      $(wildcard ./render/*.c) \
+      $(wildcard ./utils/*.c) \
+      $(wildcard ./parse/*.c)
+
 OBJ = $(SRC:.c=.o)
 
-#===================================================
-# BUILD
-#===================================================
+#==================================================
+# RULES
+#==================================================
+all: lib $(NAME)
 
-all : lib $(NAME)
-
-$(NAME) : $(OBJ)
-	$(CC) $(FLAG) -o $@ $^ $(INCLUDE) $(MLX_FLAG) 
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $^ $(INCLUDE_LIBS) $(MLX_FLAGS)
 
 mkbonus: $(OBJ)
-	$(CC) $(FLAG) -o $(NAME) $^ $(INCLUDE) $(MLX_FLAG) 
+	$(CC) $(CFLAGS) -o $(NAME) $^ $(INCLUDE_LIBS) $(MLX_FLAGS)
 
 lib:
-	make -C $(LIB_DIR)
-	make -C $(MLX_DIR)
+	@$(MAKE) -C $(LIB_DIR)
+	@$(MAKE) -C $(MLX_DIR)
 
 %.o: %.c
-	$(CC) $(FLAG) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c $< -o $@
 
 clean:
 	$(RM) $(OBJ)
-	make -C $(LIB_DIR) clean
+	-@$(MAKE) -C $(LIB_DIR) clean
+	-@$(MAKE) -C $(MLX_DIR) clean
 
 fclean: clean
-	$(RM) $(NAME) 
-	make -C $(LIB_DIR) fclean
-	make -C $(MLX_DIR) clean
+	$(RM) $(NAME)
+	-@$(MAKE) -C $(LIB_DIR) fclean
+	-@$(MAKE) -C $(MLX_DIR) clean
 
 re: fclean all
 
-.PHONY: all lib clean fclean re
+.PHONY: all clean fclean re lib mkbonus

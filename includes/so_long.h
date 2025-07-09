@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <mlx.h>
 #include "../libft/gnl/get_next_line.h"
 
 
@@ -28,6 +29,7 @@ typedef struct s_game
 
 } t_game;
 
+int	init_game(t_game *game);
 void	free_map(char **map);
 int	parse_map(char *file, t_game *game);
 void	*ft_memset(void *b, int c, size_t len);

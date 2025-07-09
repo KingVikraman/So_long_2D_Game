@@ -1,5 +1,6 @@
 #include "../includes/so_long.h"
 
+
 int	main(int argc, char **argv)
 {
 	t_game	game;
@@ -29,6 +30,12 @@ int	main(int argc, char **argv)
 
 	// 💡 If everything passes, you can proceed to MLX rendering later
 	write(1, "Map is valid!\n", 14);
+
+	if (!init_game(&game))
+		return (write(2, "Error: MLX failed\n", 18), 1);
+
+	mlx_loop(game.mlx);
+
 
 	return (0);
 }
