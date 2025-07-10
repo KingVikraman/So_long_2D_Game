@@ -7,7 +7,12 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <mlx.h>
+#include <X11/X.h>
 #include "../libft/gnl/get_next_line.h"
+
+#define TILE_SIZE 32
+#define WIDTH 10 * TILE_SIZE
+#define HEIGHT 8 * TILE_SIZE
 
 
 typedef struct s_game
@@ -34,6 +39,8 @@ void	free_map(char **map);
 int	parse_map(char *file, t_game *game);
 void	*ft_memset(void *b, int c, size_t len);
 
+int close_window(t_game *game);
+int handle_key(int keycode, t_game *game);
 
 int	validate_map(char **map, t_game *game);
 int	is_rectangular(char **map, int height, int width);

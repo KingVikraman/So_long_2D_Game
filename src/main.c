@@ -34,6 +34,12 @@ int	main(int argc, char **argv)
 	if (!init_game(&game))
 		return (write(2, "Error: MLX failed\n", 18), 1);
 
+	//game.mlx = mlx_init();
+	//game.win = mlx_new_window(game.mlx, WIDTH, HEIGHT, "So_long");
+
+	mlx_hook(game.win, 17, 0, close_window, &game);
+	mlx_key_hook(game.win, handle_key, &game);
+
 	mlx_loop(game.mlx);
 
 
