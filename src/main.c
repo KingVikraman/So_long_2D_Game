@@ -33,7 +33,11 @@ int	main(int argc, char **argv)
 
 	if (!init_game(&game))
 		return (write(2, "Error: MLX failed\n", 18), 1);
+	
+	if (!load_images(&game))
+		return (1);
 
+	render_map(&game);
 	//game.mlx = mlx_init();
 	//game.win = mlx_new_window(game.mlx, WIDTH, HEIGHT, "So_long");
 

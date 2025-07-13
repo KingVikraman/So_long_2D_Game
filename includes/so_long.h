@@ -9,8 +9,9 @@
 #include <mlx.h>
 #include <X11/X.h>
 #include "../libft/gnl/get_next_line.h"
+#include "../libft/ft_printf/ft_printf.h"
 
-#define TILE_SIZE 32
+#define TILE_SIZE 64
 #define WIDTH 10 * TILE_SIZE
 #define HEIGHT 8 * TILE_SIZE
 
@@ -47,5 +48,8 @@ int	is_rectangular(char **map, int height, int width);
 int	is_surrounded_by_walls(char **map, int height, int width);
 int	validate_content(char **map, int height, t_game *game);
 
+
+void	render_map(t_game *g);
+int     load_images(t_game *r);
 
 #endif

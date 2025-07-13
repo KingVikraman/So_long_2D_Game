@@ -11,7 +11,8 @@ MLX_DIR		= minilibx
 
 # === FILES ===
 
-SRC_FILES 		= main.c parse_map.c map_validator.c init_game.c
+SRC_FILES 		= main.c parse_map.c map_validator.c init_game.c \
+					load_images.c
 GNL_FILES 		= get_next_line.c get_next_line_utils.c
 PRINTF_FILES	= ft_printf.c ft_printf_str.c ft_printf_ptr.c \
 					ft_printf_hexdec.c ft_printf_unsigned.c
