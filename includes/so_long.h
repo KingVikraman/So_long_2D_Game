@@ -14,24 +14,47 @@
 #define TILE_SIZE 64
 #define WIDTH 10 * TILE_SIZE
 #define HEIGHT 8 * TILE_SIZE
+#define MAX_MAP_WIDTH 100
+#define MAX_MAP_HEIGHT 100
 
 
 typedef struct s_game
 {
+	void	*mlx;
+	void	*win;
+
 	char 	**map;
 	int		width;
 	int		height;
+
 	int 	player_x;
 	int 	player_y;
-	int		collectibles;
+
+	int		collected;
+	int		total_collectibles;
 	int		moves;
-	void	*mlx;
-	void	*win;
+
+	int		**collected_flags;
+
 	void	*img_player;
 	void	*img_floor;
 	void	*img_wall;
-	void	*img_collect;
-	void	*img_exit;
+	void	*img_chest_open;
+	void	*img_chest_closed;
+	void	*img_exit_closed;
+	void	*img_exit_open;
+
+	int		player_facing;
+	int		step_counter;
+
+	void	*img_run_up_1;
+	void	*img_run_up_2;
+	void	*img_run_down_1;
+	void	*img_run_down_2;
+	void	*img_run_left_1;
+	void	*img_run_left_2;
+	void	*img_run_right_1;
+	void	*img_run_right_2;
 
 } t_game;
 
@@ -51,5 +74,12 @@ int	validate_content(char **map, int height, t_game *game);
 
 void	render_map(t_game *g);
 int     load_images(t_game *r);
+
+
+void	move_player(t_game *game, int dy, int dx);
+void	check_collectible(t_game *game, int y, int x);
+void	init_collected_flags(t_game *game);
+void	free_resources(t_game *game);
+
 
 #endif

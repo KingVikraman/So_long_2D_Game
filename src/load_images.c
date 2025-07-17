@@ -1,216 +1,112 @@
-// #include "../includes/so_long.h"
 
-// int     load_images(t_game *r)
+#include "../includes/so_long.h"
+
+int	load_images(t_game *r)
+{
+	int	w;
+	int	h;
+
+	r->img_wall = mlx_xpm_file_to_image(r->mlx, "assets/wall.xpm", &w, &h);
+	r->img_floor = mlx_xpm_file_to_image(r->mlx, "assets/floor.xpm", &w, &h);
+	r->img_chest_closed = mlx_xpm_file_to_image(r->mlx, "assets/Collectible/closed_chest.xpm", &w, &h);
+	r->img_chest_open = mlx_xpm_file_to_image(r->mlx, "assets/Collectible/open_chest.xpm", &w, &h);
+	r->img_exit_closed = mlx_xpm_file_to_image(r->mlx, "assets/exit_door_close.xpm", &w, &h);
+	r->img_exit_open = mlx_xpm_file_to_image(r->mlx, "assets/exit_door_open.xpm", &w, &h);
+
+
+	// 🚶 Player animations
+
+	r->img_run_up_1      = mlx_xpm_file_to_image(r->mlx, "assets/player/run_up_1.xpm", &w, &h);
+	r->img_run_up_2      = mlx_xpm_file_to_image(r->mlx, "assets/player/run_up_2.xpm", &w, &h);
+	r->img_run_down_1    = mlx_xpm_file_to_image(r->mlx, "assets/player/run_down_1.xpm", &w, &h);
+	r->img_run_down_2    = mlx_xpm_file_to_image(r->mlx, "assets/player/run_down_2.xpm", &w, &h);
+	r->img_run_left_1    = mlx_xpm_file_to_image(r->mlx, "assets/player/run_left_1.xpm", &w, &h);
+	r->img_run_left_2    = mlx_xpm_file_to_image(r->mlx, "assets/player/run_left_2.xpm", &w, &h);
+	r->img_run_right_1   = mlx_xpm_file_to_image(r->mlx, "assets/player/run_right_1.xpm", &w, &h);
+	r->img_run_right_2   = mlx_xpm_file_to_image(r->mlx, "assets/player/run_right_2.xpm", &w, &h);
+
+	if (!r->img_wall || !r->img_floor || !r->img_chest_closed || !r->img_chest_open ||
+		!r->img_exit_closed || !r->img_exit_open ||
+		!r->img_run_up_1 || !r->img_run_up_2 ||
+		!r->img_run_down_1 || !r->img_run_down_2 ||
+		!r->img_run_left_1 || !r->img_run_left_2 ||
+		!r->img_run_right_1 || !r->img_run_right_2)
+	{
+		if (r->img_wall) mlx_destroy_image(r->mlx, r->img_wall);
+		if (r->img_floor) mlx_destroy_image(r->mlx, r->img_floor);
+		if (r->img_chest_closed) mlx_destroy_image(r->mlx, r->img_chest_closed);
+		if (r->img_chest_open) mlx_destroy_image(r->mlx, r->img_chest_open);
+		if (r->img_exit_closed) mlx_destroy_image(r->mlx, r->img_exit_closed);
+		if (r->img_exit_open) mlx_destroy_image(r->mlx, r->img_exit_open);
+		if (r->img_player) mlx_destroy_image(r->mlx, r->img_player);
+		return (0);
+	}
+	return (1);
+}
+
+void	render_map(t_game *game)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < game->height)
+	{
+		j = 0;
+		while (j < game->width)
+		{
+			char	c = game->map[i][j];
+			int		x = j * TILE_SIZE;
+			int		y = i * TILE_SIZE;
+
+			if (c == '1')
+				mlx_put_image_to_window(game->mlx, game->win, game->img_wall, x, y);
+			else
+				mlx_put_image_to_window(game->mlx, game->win, game->img_floor, x, y);
+			
+			if (c == 'C')
+			{
+				if (game->collected_flags[i][j])
+					mlx_put_image_to_window(game->mlx, game->win, game->img_chest_open, x, y);
+				else
+					mlx_put_image_to_window(game->mlx, game->win, game->img_chest_closed, x, y);
+			}
+			else if (c == 'E')
+			{
+				if (game->collected == game->total_collectibles)
+					mlx_put_image_to_window(game->mlx, game->win, game->img_exit_open, x, y);
+				else
+					mlx_put_image_to_window(game->mlx, game->win, game->img_exit_closed, x, y);
+			}
+			j++;
+		}
+		i++;
+	}
+	mlx_put_image_to_window(game->mlx, game->win, game->img_player,
+		game->player_x * TILE_SIZE, game->player_y * TILE_SIZE);
+}
+
+// void	find_player_position(t_game *game, int *player_x, int *player_y)
 // {
-// 	int w;
-// 	int h;
+// 	int	y;
+// 	int	x;
 
-// 	r->img_wall		= mlx_xpm_file_to_image(r->mlx,"assets/wall.xpm", &w, &h);
-// 	r->img_floor	= mlx_xpm_file_to_image(r->mlx,"assets/floor.xpm", &w,&h);
-// 	// r->img_player	= mlx_xpm_file_to_image()
-// 	// r->img_exit		= mlx_xpm_file_to_image()
-// 	if (!r->img_wall)
-// 		printf(" Error loading wall image\n");
-// 	else if (!r->img_floor)
-// 		printf(" Error loading floor image\n");
-
-// 	else 
-// 	{
-// 		printf("Images loaded successfully\n");
-// 		return (0);
-// 	}
-// 	return (1);
-// }
-
-// static void *choose_sprite(t_game *g , char c)
-// {
-// 	if (c == '1')
-// 		return (g->img_wall);
-// 	if (c == '0')
-// 		return (g->img_floor);
-// 	//if (c == "")
-// 	return (NULL);
-// }
-
-// void	render_map(t_game *g)
-// {
-// 	int y;
-// 	int x;
-
-// 	mlx_clear_window(g->mlx, g->win);
 // 	y = 0;
-// 	while (y < g->height)
+// 	while (y < game->height)
 // 	{
 // 		x = 0;
-// 		while (x < g->width)
+// 		while (x < game->width)
 // 		{
-// 			void *img = choose_sprite(g, g->map[y][x]);
-// 			if (img)
-// 				mlx_put_image_to_window(g->mlx, g->win, img, x * TILE_SIZE, y * TILE_SIZE);
+// 			if (game->map[y][x] == 'P')
+// 			{
+// 				*player_x = x;
+// 				*player_y = y;
+// 				return ;
+// 			}
 // 			x++;
 // 		}
 // 		y++;
 // 	}
-// 	mlx_put_image_to_window(g->mlx, g->win, g->img_player, g->player_x * TILE_SIZE, g->player_y * TILE_SIZE);
+// 	ft_printf("Error: Player position not found");
+// 	free_resources(game);
 // }
-
-
-// #include "../includes/so_long.h"
-
-// int     load_images(t_game *r)
-// {
-//     int w;
-//     int h;
-
-//     r->img_wall = mlx_xpm_file_to_image(r->mlx, "assets/wall.xpm", &w, &h);
-//     r->img_floor = mlx_xpm_file_to_image(r->mlx, "assets/floor.xpm", &w, &h);
-//     r->img_collect = mlx_xpm_file_to_image(r->mlx, "assets/collectible.xpm", &w, &h);
-//     r->img_exit = mlx_xpm_file_to_image(r->mlx, "assets/exit_door_close.xpm", &w, &h);
-//     r->img_player = mlx_xpm_file_to_image(r->mlx, "assets/Player/run_down_1.xpm", &w, &h);
-
-//     if (!r->img_wall)
-//     {
-//         printf("Error loading wall image\n");
-//         return (0);
-//     }
-//     if (!r->img_floor)
-//     {
-//         printf("Error loading floor image\n");
-//         return (0);
-//     }
-//     if (!r->img_collect)
-//     {
-//         printf("Error loading collectible image\n");
-//         return (0);
-//     }
-//     if (!r->img_exit)
-//     {
-//         printf("Error loading exit image\n");
-//         return (0);
-//     }
-//     if (!r->img_player)
-//     {
-//         printf("Error loading player image\n");
-//         return (0);
-//     }
-
-//     printf("Images loaded successfully\n");
-//     return (1);
-// }
-
-// static void *choose_sprite(t_game *g, char c)
-// {
-//     if (c == '1')
-//         return (g->img_wall);
-//     if (c == '0')
-//         return (g->img_floor);
-//     if (c == 'C')
-//         return (g->img_collect);
-//     if (c == 'E')
-//         return (g->img_exit);
-//     if (c == 'P')
-//         return (g->img_floor);  // Show floor under player
-//     return (NULL);
-// }
-
-// void	render_map(t_game *g)
-// {
-//     int y;
-//     int x;
-
-//     mlx_clear_window(g->mlx, g->win);
-//     y = 0;
-//     while (y < g->height)
-//     {
-//         x = 0;
-//         while (x < g->width)
-//         {
-//             void *img = choose_sprite(g, g->map[y][x]);
-//             if (img)
-//                 mlx_put_image_to_window(g->mlx, g->win, img, x * TILE_SIZE, y * TILE_SIZE);
-            
-//             // If this is the player position, draw the player on top
-//             if (g->map[y][x] == 'P')
-//             {
-//                 g->player_x = x;
-//                 g->player_y = y;
-//                 mlx_put_image_to_window(g->mlx, g->win, g->img_player, x * TILE_SIZE, y * TILE_SIZE);
-//             }
-//             x++;
-//         }
-//         y++;
-//     }
-// }
-
-#include "../includes/so_long.h"
-
-int     load_images(t_game *r)
-{
-    int w;
-    int h;
-
-    r->img_wall = mlx_xpm_file_to_image(r->mlx, "assets/wall.xpm", &w, &h);
-    r->img_floor = mlx_xpm_file_to_image(r->mlx, "assets/floor.xpm", &w, &h);
-    // r->img_collect = mlx_xpm_file_to_image(r->mlx, "assets/collectible.xpm", &w, &h);
-    // r->img_exit = mlx_xpm_file_to_image(r->mlx, "assets/exit_door_close.xpm", &w, &h);
-    // r->img_player = mlx_xpm_file_to_image(r->mlx, "assets/Player/run_down_1.xpm", &w, &h);
-
-    if (!r->img_wall)
-    {
-        printf("Error loading wall image\n");
-        return (0);
-    }
-    if (!r->img_floor)
-    {
-        printf("Error loading floor image\n");
-        return (0);
-    }
-
-    printf("Images loaded successfully\n");
-    return (1);
-}
-
-static void *choose_sprite(t_game *g, char c)
-{
-    if (c == '1')
-        return (g->img_wall);
-    if (c == '0')
-        return (g->img_floor);
-    if (c == 'C')
-        return (g->img_floor);  // Show floor for collectible for now
-    if (c == 'E')
-        return (g->img_floor);  // Show floor for exit for now
-    if (c == 'P')
-        return (g->img_floor);  // Show floor under player
-    return (NULL);
-}
-
-void	render_map(t_game *g)
-{
-    int y;
-    int x;
-
-    mlx_clear_window(g->mlx, g->win);
-    y = 0;
-    while (y < g->height)
-    {
-        x = 0;
-        while (x < g->width)
-        {
-            void *img = choose_sprite(g, g->map[y][x]);
-            if (img)
-                mlx_put_image_to_window(g->mlx, g->win, img, x * TILE_SIZE, y * TILE_SIZE);
-            
-            // Find and store player position
-            if (g->map[y][x] == 'P')
-            {
-                g->player_x = x;
-                g->player_y = y;
-                // For now, just show floor where player is
-                // You can add player sprite later
-            }
-            x++;
-        }
-        y++;
-    }
-}

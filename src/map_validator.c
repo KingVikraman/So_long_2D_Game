@@ -57,7 +57,11 @@ int	validate_content(char **map, int height, t_game *game)
 		while (map[y][x] && map[y][x] != '\n')
 		{
 			if (map[y][x] == 'P')
+			{
 				player++;
+				game->player_x = x;
+				game->player_y = y;
+			}
 			else if (map[y][x] == 'E')
 				exit++;
 			else if (map[y][x] == 'C')
@@ -70,7 +74,7 @@ int	validate_content(char **map, int height, t_game *game)
 	}
 	if (player != 1 || exit < 1 || collect < 1)
 		return (0);
-	game->collectibles = collect;
+	game->total_collectibles = collect;
 	return (1);
 }
 
