@@ -45,7 +45,7 @@ int	main(int argc, char **argv)
 			while (--i >= 0)
 				free(game.collected_flags[i]);
 			free(game.collected_flags);
-			free_map(game.map);
+			//free_map(game.map);
 			printf("Error: Memory allocation failure\n");
 			return(1);
 		}
@@ -74,6 +74,7 @@ int	main(int argc, char **argv)
 	render_map(&game);
 	mlx_hook(game.win, 17, 0, close_window, &game);
 	mlx_key_hook(game.win, handle_key, &game);
+	mlx_loop_hook(game.mlx, idle_check_loop, &game);
 	mlx_loop(game.mlx);
 
 
@@ -112,17 +113,3 @@ void	free_map(char **map)
 }
 
 
-int	handle_key(int keycode, t_game *game)
-{
-    if (keycode == 65307) // ESC key
-        close_window(game);
-    else if (keycode == 119 || keycode == 65362) // W or Up arrow
-        move_player(game, -1, 0);
-    else if (keycode == 115 || keycode == 65364) // S or Down arrow
-        move_player(game, 1, 0);
-    else if (keycode == 97 || keycode == 65361) // A or Left arrow
-        move_player(game, 0, -1);
-    else if (keycode == 100 || keycode == 65363) // D or Right arrow
-        move_player(game, 0, 1);
-    return (0);
-}

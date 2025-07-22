@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <mlx.h>
 #include <X11/X.h>
+#include <sys/time.h>
 #include "../libft/gnl/get_next_line.h"
 #include "../libft/ft_printf/ft_printf.h"
 
@@ -39,6 +40,7 @@ typedef struct s_game
 	void	*img_player;
 	void	*img_floor;
 	void	*img_wall;
+	void	*img_idle;
 	void	*img_chest_open;
 	void	*img_chest_closed;
 	void	*img_exit_closed;
@@ -56,6 +58,8 @@ typedef struct s_game
 	void	*img_run_right_1;
 	void	*img_run_right_2;
 
+	struct timeval last_input_time;
+	int				is_idle; 
 } t_game;
 
 int	init_game(t_game *game);
@@ -81,5 +85,8 @@ void	check_collectible(t_game *game, int y, int x);
 void	init_collected_flags(t_game *game);
 void	free_resources(t_game *game);
 
+void	draw_player(t_game *g);
+
+int     idle_check_loop(t_game *game);
 
 #endif
