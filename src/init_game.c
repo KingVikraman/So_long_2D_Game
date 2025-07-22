@@ -158,3 +158,4 @@ void	free_resources(t_game *game)
 		free(game->mlx);
 	}
 }
+
