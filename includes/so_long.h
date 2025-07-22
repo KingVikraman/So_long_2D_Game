@@ -46,6 +46,7 @@ typedef struct s_game
 	void	*img_exit_closed;
 	void	*img_exit_open;
 
+	
 	int		player_facing;
 	int		step_counter;
 
