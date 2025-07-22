@@ -160,3 +160,4 @@ void	free_resources(t_game *game)
 }
 
 
+

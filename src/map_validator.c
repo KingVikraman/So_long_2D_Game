@@ -88,3 +88,4 @@ int	validate_map(char **map, t_game *game)
 		return (write(2, "Error: Invalid characters or wrong counts\n", 42), 0);
 	return (1);
 }
+

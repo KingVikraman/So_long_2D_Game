@@ -40,6 +40,7 @@ int	load_images(t_game *r)
 	return (1);
 }
 
+
 void	render_map(t_game *game)
 {
 	int	i;
