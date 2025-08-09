@@ -1,5 +1,13 @@
 #include "../includes/so_long.h"
 
+int	validate_map(char **map, t_game *game);
+int is_map_valid_with_floodfill(t_game *game);
+int	is_rectangular(char **map, int height, int width);
+int	validate_content(char **map, int height, t_game *game);
+int	is_surrounded_by_walls(char **map, int height, int width);
+
+
+
 int	is_rectangular(char **map, int height, int width)
 {
 	int i;
@@ -86,6 +94,43 @@ int	validate_map(char **map, t_game *game)
 		return (write(2, "Error: Map is not surrounded by walls\n", 39), 0);
 	if (!validate_content(map, game->height, game))
 		return (write(2, "Error: Invalid characters or wrong counts\n", 42), 0);
+	if (!is_map_valid_with_floodfill(game))
+	{
+		write(2, "Error: Unreachable collectible or exit\n", 39);
+		return (0);
+	}
 	return (1);
 }
 
+int is_map_valid_with_floodfill(t_game *game)
+{
+	char	**temp_map;
+	int		y, x;
+	int		valid = 1;
+
+	temp_map = duplicate_map(game->map, game->height);
+	if (!temp_map)
+		return (0);
+
+	flood_fill(temp_map, game->player_y, game->player_x);
+
+	y = 0;
+	while (y < game->height)
+	{
+		x = 0;
+		while (x < game->width)
+		{
+			if (temp_map[y][x] == 'C' || temp_map[y][x] == 'E')
+				valid = 0;
+			x++;
+		}
+		y++;
+	}
+	// Free duplicated map
+	y = 0;
+	while (y < game->height)
+		free(temp_map[y++]);
+	free(temp_map);
+
+	return (valid);
+}

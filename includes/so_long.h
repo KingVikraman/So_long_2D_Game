@@ -46,7 +46,7 @@ typedef struct s_game
 	void	*img_exit_closed;
 	void	*img_exit_open;
 
-	
+
 	int		player_facing;
 	int		step_counter;
 
@@ -89,5 +89,10 @@ void	free_resources(t_game *game);
 void	draw_player(t_game *g);
 
 int     idle_check_loop(t_game *game);
+
+int is_map_valid_with_floodfill(t_game *game);
+void flood_fill(char **map, int y, int x);
+char **duplicate_map(char **original, int height);
+
 
 #endif
