@@ -107,12 +107,13 @@ int is_map_valid_with_floodfill(t_game *game)
 	char	**temp_map;
 	int		y, x;
 	int		valid = 1;
+	int count = game->total_collectibles;
 
 	temp_map = duplicate_map(game->map, game->height);
 	if (!temp_map)
 		return (0);
 
-	flood_fill(temp_map, game->player_y, game->player_x);
+	flood_fill(temp_map, game->player_y, game->player_x, &count);
 
 	y = 0;
 	while (y < game->height)

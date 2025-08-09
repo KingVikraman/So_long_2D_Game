@@ -91,7 +91,7 @@ void	draw_player(t_game *g);
 int     idle_check_loop(t_game *game);
 
 int is_map_valid_with_floodfill(t_game *game);
-void flood_fill(char **map, int y, int x);
+void flood_fill(char **map, int y, int x, int *collect_count);
 char **duplicate_map(char **original, int height);
 
 
