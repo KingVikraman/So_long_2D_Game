@@ -89,14 +89,27 @@ int	validate_content(char **map, int height, t_game *game)
 int	validate_map(char **map, t_game *game)
 {
 	if (!is_rectangular(map, game->height, game->width))
-		return (write(2, "Error: Map is not rectangular\n", 31), 0);
+	{
+		ft_printf("Error\n");
+		ft_printf("Map is not rectangular\n");
+		return(0);
+	}
 	if (!is_surrounded_by_walls(map, game->height, game->width))
-		return (write(2, "Error: Map is not surrounded by walls\n", 39), 0);
+	{
+		ft_printf("Error\n");
+		ft_printf("Map is not surrounded by walls\n");
+		return (0);
+	}
 	if (!validate_content(map, game->height, game))
-		return (write(2, "Error: Invalid characters or wrong counts\n", 42), 0);
+	{
+		ft_printf("Error\n");
+		ft_printf("Invalid characters or wrong counts\n");
+		return (0);
+	}
 	if (!is_map_valid_with_floodfill(game))
 	{
-		write(2, "Error: Unreachable collectible or exit\n", 39);
+		ft_printf("Error\n");
+		ft_printf("Error: Unreachable collectible or exit\n");
 		return (0);
 	}
 	return (1);

@@ -15,7 +15,7 @@ int	load_images(t_game *r)
 	r->img_idle = mlx_xpm_file_to_image(r->mlx, "assets/idle_player.xpm", &w, &h);
 
 
-	// 🚶 Player animations
+	//  Player animations
 
 	r->img_run_up_1      = mlx_xpm_file_to_image(r->mlx, "assets/Player/run_up_1.xpm", &w, &h);
 	r->img_run_up_2      = mlx_xpm_file_to_image(r->mlx, "assets/Player/run_up_2.xpm", &w, &h);
@@ -33,7 +33,8 @@ int	load_images(t_game *r)
 		!r->img_run_left_1 || !r->img_run_left_2 ||
 		!r->img_run_right_1 || !r->img_run_right_2 || !r->img_idle)
 	{
-		ft_printf("Error: failed to load one or more sprites\n");
+		ft_printf("Error\n");
+		ft_printf("Failed to load one or more sprites\n");
 		free_resources(r);
 		return (0);
 	}
@@ -94,7 +95,7 @@ void	draw_player(t_game *g)
 	}
 	else
 	{
-		// 🏃‍♂️ Running animation
+		//  Running animation
 		if (g->player_facing == 'U')
 			sprite = (g->step_counter % 2 == 0) ? g->img_run_up_1 : g->img_run_up_2;
 		else if (g->player_facing == 'D')
@@ -105,33 +106,8 @@ void	draw_player(t_game *g)
 			sprite = (g->step_counter % 2 == 0) ? g->img_run_right_1 : g->img_run_right_2;
 	}
 
-	// 🎨 Render player sprite
+	//  Render player sprite
 	mlx_put_image_to_window(g->mlx, g->win, sprite,
 		g->player_x * TILE_SIZE, g->player_y * TILE_SIZE);
 }
 
-
-// void	find_player_position(t_game *game, int *player_x, int *player_y)
-// {
-// 	int	y;
-// 	int	x;
-
-// 	y = 0;
-// 	while (y < game->height)
-// 	{
-// 		x = 0;
-// 		while (x < game->width)
-// 		{
-// 			if (game->map[y][x] == 'P')
-// 			{
-// 				*player_x = x;
-// 				*player_y = y;
-// 				return ;
-// 			}
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// 	ft_printf("Error: Player position not found");
-// 	free_resources(game);
-// }

@@ -8,7 +8,9 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		write(2, "Usage: ./so_long map.ber\n", 26);
+		//write(2, "Usage: ./so_long map.ber\n", 26);
+		ft_printf("Error\n");
+		ft_printf("Usage: ./so_long map.ber\n");
 		return (1);
 	}
 
@@ -18,7 +20,9 @@ int	main(int argc, char **argv)
 	// Step 2: Parse map from file
 	if (!parse_map(argv[1], &game))
 	{
-		write(2, "Error: Failed to parse map\n", 28);
+		//write(2, "Error: Failed to parse map\n", 28);
+		ft_printf("Error\n");
+		ft_printf("Failed to parse map\n");
 		return (1);
 	}
 	//Step 3: Validate the map
@@ -32,7 +36,8 @@ int	main(int argc, char **argv)
 	if (!game.collected_flags)
 	{
 		free_map(game.map);
-		printf("Error: Memory allocation failure\n"); 
+		ft_printf("Error\n");
+		ft_printf("Memory allocation failure\n");
 		return (1);
 	}
 
@@ -46,7 +51,8 @@ int	main(int argc, char **argv)
 				free(game.collected_flags[i]);
 			free(game.collected_flags);
 			//free_map(game.map);
-			printf("Error: Memory allocation failure\n");
+			ft_printf("Error\n");
+			ft_printf("Memory allocation failure\n");
 			return(1);
 		}
 		i++;
@@ -55,12 +61,13 @@ int	main(int argc, char **argv)
 	init_collected_flags(&game);
 
 	// 💡 If everything passes, you can proceed to MLX rendering later
-	printf("Map parsed and validated successfully\n");
+	ft_printf("Map parsed and validated successfully\n");
 
 	if (!init_game(&game))
 	{
 		free_resources(&game);
-		printf("Error: MLX failed\n");
+		ft_printf("Error\n");
+		ft_printf("MLX failed\n");
 		return (1);
 	}
 	
@@ -79,37 +86,6 @@ int	main(int argc, char **argv)
 
 
 	return (0);
-}
-
-void	*ft_memset(void *b, int c, size_t len)
-{
-	size_t				i;
-	unsigned char	*ptr;
-
-	ptr = (unsigned char *)b;
-	i = 0;
-	while (i < len)
-	{
-		ptr[i] = (unsigned char)c;
-		i++;
-	}
-	return (b);
-}
-
-
-void	free_map(char **map)
-{
-	int	i;
-
-	if (!map)
-		return ;
-	i = 0;
-	while (map[i])
-	{
-		free(map[i]);
-		i++;
-	}
-	free(map);
 }
 
 

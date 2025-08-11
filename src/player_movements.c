@@ -57,3 +57,57 @@ int     idle_check_loop(t_game *game)
     render_map(game);
     return (0);
 }
+
+void	move_player(t_game *game, int dy, int dx)
+{
+	int ny = game->player_y + dy;
+	int nx = game->player_x + dx;
+
+	// 1️⃣ Bound check
+	if (ny < 0 || ny >= game->height || nx < 0 || nx >= game->width)
+		return;
+
+	// 2️⃣ Wall check
+	if (game->map[ny][nx] == '1')
+		return;
+
+	// 3️⃣ Exit check
+	if (game->map[ny][nx] == 'E' && game->collected == game->total_collectibles)
+	{
+		ft_printf("You won! Game completed in %d moves.\n", game->moves + 1);
+		close_window(game);
+		return;
+	}
+	else if (game->map[ny][nx] == 'E')
+	{
+		ft_printf("Collect all items before exiting!\n");
+		return;
+	}
+
+	// 4️⃣ Update player direction
+	if (dy == -1)
+		game->player_facing = 'U';
+	else if (dy == 1)
+		game->player_facing = 'D';
+	else if (dx == -1)
+		game->player_facing = 'L';
+	else if (dx == 1)
+		game->player_facing = 'R';
+
+	// 5️⃣ Step counter for animation
+	game->step_counter++;
+
+	// 6️⃣ Collectible check
+	check_collectible(game, ny, nx);
+
+	// 7️⃣ Update player position
+	game->player_x = nx;
+	game->player_y = ny;
+	game->moves++;
+
+	ft_printf("Moves: %d, Collected: %d/%d\n",
+		game->moves, game->collected, game->total_collectibles);
+
+	// 8️⃣ Redraw everything (calls draw_player() inside render_map)
+	render_map(game);
+}
