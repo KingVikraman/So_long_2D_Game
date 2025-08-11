@@ -1,5 +1,14 @@
 #include "../includes/so_long.h"
 
+/* FUNCTION PROTOTYPING */
+
+int     idle_check_loop(t_game *game);
+int	    handle_key(int keycode, t_game *game);
+void	move_player(t_game *game, int dy, int dx);
+
+
+
+/* FUNCTIONS*/
 
 int	handle_key(int keycode, t_game *game)
 {
@@ -63,15 +72,15 @@ void	move_player(t_game *game, int dy, int dx)
 	int ny = game->player_y + dy;
 	int nx = game->player_x + dx;
 
-	// 1️⃣ Bound check
+	//  Bound check
 	if (ny < 0 || ny >= game->height || nx < 0 || nx >= game->width)
 		return;
 
-	// 2️⃣ Wall check
+	//  Wall check
 	if (game->map[ny][nx] == '1')
 		return;
 
-	// 3️⃣ Exit check
+	//  Exit check
 	if (game->map[ny][nx] == 'E' && game->collected == game->total_collectibles)
 	{
 		ft_printf("You won! Game completed in %d moves.\n", game->moves + 1);
@@ -84,7 +93,7 @@ void	move_player(t_game *game, int dy, int dx)
 		return;
 	}
 
-	// 4️⃣ Update player direction
+	//  Update player direction
 	if (dy == -1)
 		game->player_facing = 'U';
 	else if (dy == 1)
@@ -94,13 +103,13 @@ void	move_player(t_game *game, int dy, int dx)
 	else if (dx == 1)
 		game->player_facing = 'R';
 
-	// 5️⃣ Step counter for animation
+	//  Step counter for animation
 	game->step_counter++;
 
-	// 6️⃣ Collectible check
+	//  Collectible check
 	check_collectible(game, ny, nx);
 
-	// 7️⃣ Update player position
+	//  Update player position
 	game->player_x = nx;
 	game->player_y = ny;
 	game->moves++;
@@ -108,6 +117,6 @@ void	move_player(t_game *game, int dy, int dx)
 	ft_printf("Moves: %d, Collected: %d/%d\n",
 		game->moves, game->collected, game->total_collectibles);
 
-	// 8️⃣ Redraw everything (calls draw_player() inside render_map)
+	//  Redraw everything (calls draw_player() inside render_map)
 	render_map(game);
 }

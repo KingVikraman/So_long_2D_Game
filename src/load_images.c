@@ -42,53 +42,12 @@ int	load_images(t_game *r)
 }
 
 
-void	render_map(t_game *game)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < game->height)
-	{
-		j = 0;
-		while (j < game->width)
-		{
-			char	c = game->map[i][j];
-			int		x = j * TILE_SIZE;
-			int		y = i * TILE_SIZE;
-
-			if (c == '1')
-				mlx_put_image_to_window(game->mlx, game->win, game->img_wall, x, y);
-			else
-				mlx_put_image_to_window(game->mlx, game->win, game->img_floor, x, y);
-			
-			if (c == 'C')
-			{
-				if (game->collected_flags[i][j])
-					mlx_put_image_to_window(game->mlx, game->win, game->img_chest_open, x, y);
-				else
-					mlx_put_image_to_window(game->mlx, game->win, game->img_chest_closed, x, y);
-			}
-			else if (c == 'E')
-			{
-				if (game->collected == game->total_collectibles)
-					mlx_put_image_to_window(game->mlx, game->win, game->img_exit_open, x, y);
-				else
-					mlx_put_image_to_window(game->mlx, game->win, game->img_exit_closed, x, y);
-			}
-			j++;
-		}
-		i++;
-	}
-	draw_player(game);
-}
-
 
 void	draw_player(t_game *g)
 {
 	void	*sprite;
 
-	// 💤 If player is idle, show the idle sprite based on direction
+	//  If player is idle, show the idle sprite based on direction
 	if (g->is_idle)
 	{
 		sprite = g->img_idle;

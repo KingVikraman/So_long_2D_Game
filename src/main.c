@@ -88,4 +88,38 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
+static	int	validate_args(int args)
+{
 
+}
+
+
+static	int	init_game_structs(t_game *game, char *map_path)
+{
+
+}
+
+
+static	int	memory_allocation(t_game *game)
+{
+
+}
+
+static	int	game_lauch(t_game *game)
+{
+
+}
+
+int	main(int argc, char **argv)
+{
+	if ()
+		return (1);
+	if ()
+		return (1);
+	if ()
+		return (1);
+	ft_printf("Map parsed and validated successfully\n");
+	if ()
+		return (1); //failure
+	return (0); // succsess
+}
