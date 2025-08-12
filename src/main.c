@@ -21,7 +21,7 @@ static	int	init_game_structs(t_game *game, char *map_path)
 		ft_printf("Error\nFailed to parse map\n");
 		return (0);
 	}
-	if (!validated_map(game->map, game))
+	if (!validate_map(game->map, game))
 	{
 		free_map(game->map);
 		return (0);
@@ -75,7 +75,7 @@ static	int	game_lauch(t_game *game)
 	render_map(game);
 	mlx_hook(game->win, 17, 0, close_window, game);
 	mlx_key_hook(game->win, handle_key, game);
-	mlx_loop_hook(game->win, idle_check_loop, game);
+	mlx_loop_hook(game->mlx, idle_check_loop, game);
 	mlx_loop(game->mlx);
 	return (1);
 }
@@ -88,10 +88,10 @@ int	main(int argc, char **argv)
 		return (1);
 	if (!init_game_structs(&game, argv[1]))
 		return (1);
-	if (!allocate_flags(&game))
+	if (!memory_allocation(&game))
 		return (1);
 	ft_printf("Map parsed and validated successfully\n");
-	if (!start_game(&game))
+	if (!game_lauch(&game))
 		return (1); //failure
 	return (0); // succsess
 }

@@ -41,7 +41,7 @@ void	draw_player(t_game *game)
 	if (game->is_idle)
 		sprite = get_idle_sprite(game);
 	else
-		sprite - get_walking_sprite(game);
+		sprite = get_walking_sprite(game);
 	mlx_put_image_to_window(game->mlx, game->win, sprite, game->player_x
 		* TILE_SIZE, game->player_y * TILE_SIZE);
 }

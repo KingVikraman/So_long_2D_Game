@@ -77,7 +77,7 @@ int	validate_content(char **map, int height, t_game *game);
 
 
 void	render_map(t_game *g);
-int     load_images(t_game *r);
+int     load_images(t_game *game);
 
 
 void	move_player(t_game *game, int dy, int dx);
@@ -85,7 +85,7 @@ void	check_collectible(t_game *game, int y, int x);
 void	init_collected_flags(t_game *game);
 void	free_resources(t_game *game);
 
-void	draw_player(t_game *g);
+void	draw_player(t_game *game);
 
 int     idle_check_loop(t_game *game);
 
