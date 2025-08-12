@@ -43,30 +43,31 @@ int	load_images(t_game *r)
 
 
 
-void	draw_player(t_game *g)
-{
-	void	*sprite;
+// void	draw_player(t_game *g)
+// {
+// 	void	*sprite;
 
-	//  If player is idle, show the idle sprite based on direction
-	if (g->is_idle)
-	{
-		sprite = g->img_idle;
-	}
-	else
-	{
-		//  Running animation
-		if (g->player_facing == 'U')
-			sprite = (g->step_counter % 2 == 0) ? g->img_run_up_1 : g->img_run_up_2;
-		else if (g->player_facing == 'D')
-			sprite = (g->step_counter % 2 == 0) ? g->img_run_down_1 : g->img_run_down_2;
-		else if (g->player_facing == 'L')
-			sprite = (g->step_counter % 2 == 0) ? g->img_run_left_1 : g->img_run_left_2;
-		else
-			sprite = (g->step_counter % 2 == 0) ? g->img_run_right_1 : g->img_run_right_2;
-	}
+// 	//  If player is idle, show the idle sprite based on direction
+// 	if (g->is_idle)
+// 	{
+// 		sprite = g->img_idle;
+// 	}
+// 	else
+// 	{
+// 		//  Running animation
+// 		if (g->player_facing == 'U')
+// 			sprite = (g->step_counter % 2 == 0) ? g->img_run_up_1 : g->img_run_up_2;
+// 		else if (g->player_facing == 'D')
+// 			sprite = (g->step_counter % 2 == 0) ? g->img_run_down_1 : g->img_run_down_2;
+// 		else if (g->player_facing == 'L')
+// 			sprite = (g->step_counter % 2 == 0) ? g->img_run_left_1 : g->img_run_left_2;
+// 		else
+// 			sprite = (g->step_counter % 2 == 0) ? g->img_run_right_1 : g->img_run_right_2;
+// 	}
 
-	//  Render player sprite
-	mlx_put_image_to_window(g->mlx, g->win, sprite,
-		g->player_x * TILE_SIZE, g->player_y * TILE_SIZE);
-}
+// 	//  Render player sprite
+// 	mlx_put_image_to_window(g->mlx, g->win, sprite,
+// 		g->player_x * TILE_SIZE, g->player_y * TILE_SIZE);
+// }
+
 
