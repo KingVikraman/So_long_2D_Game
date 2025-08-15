@@ -1,25 +1,24 @@
 #include "../includes/so_long.h"
 
-static void *get_idle_sprite(t_game *game)
+static	void	*get_idle_sprite(t_game *game)
 {
 	return (game->img_idle);
 }
 
-
-static void *get_walking_sprite(t_game *game)
+static	void	*get_walking_sprite(t_game *game)
 {
 	if (game->player_facing == 'U')
 	{
 		if (game->step_counter % 2 == 0)
 			return (game->img_run_up_1);
-		else 
+		else
 			return (game->img_run_up_2);
 	}
 	else if (game->player_facing == 'D')
 	{
 		if (game->step_counter % 2 == 0)
 			return (game->img_run_down_1);
-		else 
+		else
 			return (game->img_run_down_2);
 	}
 	else if (game->player_facing == 'L')

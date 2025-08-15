@@ -5,6 +5,7 @@ int is_map_valid_with_floodfill(t_game *game);
 int	is_rectangular(char **map, int height, int width);
 int	validate_content(char **map, int height, t_game *game);
 int	is_surrounded_by_walls(char **map, int height, int width);
+static int	check_tile(char tile, int x, int y, t_game *game);
 
 
 
@@ -47,42 +48,83 @@ int	is_surrounded_by_walls(char **map, int height, int width)
 	return (1);
 }
 
+// int	validate_content(char **map, int height, t_game *game)
+// {
+// 	int x;
+// 	int y;
+// 	int player;
+// 	int exit;
+// 	int collect;
+
+// 	player = 0;
+// 	exit = 0;
+// 	collect = 0;
+// 	y = 0;
+// 	while (y < height)
+// 	{
+// 		x = 0;
+// 		while (map[y][x] && map[y][x] != '\n')
+// 		{
+// 			if (map[y][x] == 'P')
+// 			{
+// 				player++;
+// 				game->player_x = x;
+// 				game->player_y = y;
+// 			}
+// 			else if (map[y][x] == 'E')
+// 				exit++;
+// 			else if (map[y][x] == 'C')
+// 				collect++;
+// 			else if (map[y][x] != '1' && map[y][x] != '0')
+// 				return (0);
+// 			x++;
+// 		}
+// 		y++;
+// 	}
+// 	if (player != 1 || exit < 1 || collect < 1)
+// 		return (0);
+// 	game->total_collectibles = collect;
+// 	return (1);
+// }
+
+
 int	validate_content(char **map, int height, t_game *game)
 {
-	int x;
-	int y;
-	int player;
-	int exit;
-	int collect;
+	int	x;
+	int	y;
 
-	player = 0;
-	exit = 0;
-	collect = 0;
-	y = 0;
-	while (y < height)
+	game->player_count = 0;
+	game->exit_count = 0;
+	game->total_collectibles = 0;
+
+	y = -1;
+	while (++y < height)
 	{
-		x = 0;
-		while (map[y][x] && map[y][x] != '\n')
-		{
-			if (map[y][x] == 'P')
-			{
-				player++;
-				game->player_x = x;
-				game->player_y = y;
-			}
-			else if (map[y][x] == 'E')
-				exit++;
-			else if (map[y][x] == 'C')
-				collect++;
-			else if (map[y][x] != '1' && map[y][x] != '0')
+		x = -1;
+		while (map[y][++x] && map[y][x] != '\n')
+			if (!check_tile(map[y][x], x, y, game))
 				return (0);
-			x++;
-		}
-		y++;
 	}
-	if (player != 1 || exit < 1 || collect < 1)
+	if (game->player_count != 1 || game->exit_count < 1
+		|| game->total_collectibles < 1)
 		return (0);
-	game->total_collectibles = collect;
+	return (1);
+}
+
+static int	check_tile(char tile, int x, int y, t_game *game)
+{
+	if (tile == 'P')
+	{
+		game->player_count++;
+		game->player_x = x;
+		game->player_y = y;
+	}
+	else if (tile == 'E')
+		game->exit_count++;
+	else if (tile == 'C')
+		game->total_collectibles++;
+	else if (tile != '1' && tile != '0')
+		return (0);
 	return (1);
 }
 
@@ -90,26 +132,22 @@ int	validate_map(char **map, t_game *game)
 {
 	if (!is_rectangular(map, game->height, game->width))
 	{
-		ft_printf("Error\n");
-		ft_printf("Map is not rectangular\n");
+		ft_printf("Error\nMap is not rectangular\n");
 		return(0);
 	}
 	if (!is_surrounded_by_walls(map, game->height, game->width))
 	{
-		ft_printf("Error\n");
-		ft_printf("Map is not surrounded by walls\n");
+		ft_printf("Error\nMap is not surrounded by walls\n");
 		return (0);
 	}
 	if (!validate_content(map, game->height, game))
 	{
-		ft_printf("Error\n");
-		ft_printf("Invalid characters or wrong counts\n");
+		ft_printf("Error\nInvalid characters or wrong counts\n");
 		return (0);
 	}
 	if (!is_map_valid_with_floodfill(game))
 	{
-		ft_printf("Error\n");
-		ft_printf("Error: Unreachable collectible or exit\n");
+		ft_printf("Error\nUnreachable collectible or exit\n");
 		return (0);
 	}
 	return (1);
@@ -118,9 +156,13 @@ int	validate_map(char **map, t_game *game)
 int is_map_valid_with_floodfill(t_game *game)
 {
 	char	**temp_map;
-	int		y, x;
-	int		valid = 1;
-	int count = game->total_collectibles;
+	int		y;
+	int 	x;
+	int		valid;
+	int count;
+
+	valid = 1;
+	count = game->total_collectibles;
 
 	temp_map = duplicate_map(game->map, game->height);
 	if (!temp_map)
@@ -140,7 +182,6 @@ int is_map_valid_with_floodfill(t_game *game)
 		}
 		y++;
 	}
-	// Free duplicated map
 	y = 0;
 	while (y < game->height)
 		free(temp_map[y++]);

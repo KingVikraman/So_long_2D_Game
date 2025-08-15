@@ -59,7 +59,10 @@ typedef struct s_game
 	void	*img_run_right_2;
 
 	struct timeval last_input_time;
-	int				is_idle; 
+	int				is_idle;
+
+	int		player_count;
+	int		exit_count;
 } t_game;
 
 int	init_game(t_game *game);

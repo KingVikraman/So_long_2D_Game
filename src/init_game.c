@@ -1,12 +1,10 @@
 #include "../includes/so_long.h"
 
-
 int	init_game(t_game *game)
 {
 	game->mlx = mlx_init();
 	if (!game->mlx)
 		return (0);
-
 	game->win = mlx_new_window(game->mlx, game->width * TILE_SIZE,
 			game->height * TILE_SIZE, "So_long");
 	if (!game->win)
@@ -17,10 +15,11 @@ int	init_game(t_game *game)
 	}
 	return (1);
 }
+
 void	init_collected_flags(t_game *game)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (i < game->height)
@@ -44,13 +43,9 @@ void	check_collectible(t_game *game, int y, int x)
 	}
 }
 
-
-
-int close_window(t_game *game)
+int	close_window(t_game *game)
 {
 	free_resources(game);
-	//mlx_destroy_window(game->mlx, game->win);
 	exit (0);
 	return (0);
 }
-

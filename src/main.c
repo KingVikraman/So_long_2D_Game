@@ -1,7 +1,5 @@
 #include "../includes/so_long.h"
 
-
-
 static	int	validate_args(int args)
 {
 	if (args != 2)
@@ -11,7 +9,6 @@ static	int	validate_args(int args)
 	}
 	return (1);
 }
-
 
 static	int	init_game_structs(t_game *game, char *map_path)
 {
@@ -29,10 +26,9 @@ static	int	init_game_structs(t_game *game, char *map_path)
 	return (1);
 }
 
-
 static	int	memory_allocation(t_game *game)
 {
-	int i;
+	int	i;
 
 	game->collected_flags = malloc(sizeof(int *) * game->height);
 	if (!game->collected_flags)
@@ -47,7 +43,7 @@ static	int	memory_allocation(t_game *game)
 		game->collected_flags[i] = malloc(sizeof(int) * game->width);
 		if (!game->collected_flags)
 		{
-			while(--i >= 0)
+			while (--i >= 0)
 				free(game->collected_flags[i]);
 			free(game->collected_flags);
 			ft_printf("Error\nMemory allocation failure\n");
@@ -57,7 +53,6 @@ static	int	memory_allocation(t_game *game)
 	init_collected_flags(game);
 	return (1);
 }
-
 
 static	int	game_lauch(t_game *game)
 {
@@ -82,7 +77,7 @@ static	int	game_lauch(t_game *game)
 
 int	main(int argc, char **argv)
 {
-	t_game game;
+	t_game	game;
 
 	if (!validate_args(argc))
 		return (1);
@@ -92,6 +87,6 @@ int	main(int argc, char **argv)
 		return (1);
 	ft_printf("Map parsed and validated successfully\n");
 	if (!game_lauch(&game))
-		return (1); //failure
-	return (0); // succsess
+		return (1);
+	return (0);
 }
