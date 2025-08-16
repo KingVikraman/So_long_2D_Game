@@ -48,45 +48,6 @@ int	is_surrounded_by_walls(char **map, int height, int width)
 	return (1);
 }
 
-// int	validate_content(char **map, int height, t_game *game)
-// {
-// 	int x;
-// 	int y;
-// 	int player;
-// 	int exit;
-// 	int collect;
-
-// 	player = 0;
-// 	exit = 0;
-// 	collect = 0;
-// 	y = 0;
-// 	while (y < height)
-// 	{
-// 		x = 0;
-// 		while (map[y][x] && map[y][x] != '\n')
-// 		{
-// 			if (map[y][x] == 'P')
-// 			{
-// 				player++;
-// 				game->player_x = x;
-// 				game->player_y = y;
-// 			}
-// 			else if (map[y][x] == 'E')
-// 				exit++;
-// 			else if (map[y][x] == 'C')
-// 				collect++;
-// 			else if (map[y][x] != '1' && map[y][x] != '0')
-// 				return (0);
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// 	if (player != 1 || exit < 1 || collect < 1)
-// 		return (0);
-// 	game->total_collectibles = collect;
-// 	return (1);
-// }
-
 
 int	validate_content(char **map, int height, t_game *game)
 {
@@ -153,39 +114,88 @@ int	validate_map(char **map, t_game *game)
 	return (1);
 }
 
-int is_map_valid_with_floodfill(t_game *game)
+// int is_map_valid_with_floodfill(t_game *game)
+// {
+// 	char	**temp_map;
+// 	int		y;
+// 	int 	x;
+// 	int		valid;
+// 	int count;
+
+// 	valid = 1;
+// 	count = game->total_collectibles;
+
+// 	temp_map = duplicate_map(game->map, game->height);
+// 	if (!temp_map)
+// 		return (0);
+
+// 	flood_fill(temp_map, game->player_y, game->player_x, &count);
+
+// 	y = 0;
+// 	while (y < game->height)
+// 	{
+// 		x = 0;
+// 		while (x < game->width)
+// 		{
+// 			if (temp_map[y][x] == 'C' || temp_map[y][x] == 'E')
+// 				valid = 0;
+// 			x++;
+// 		}
+// 		y++;
+// 	}
+// 	y = 0;
+// 	while (y < game->height)
+// 		free(temp_map[y++]);
+// 	free(temp_map);
+
+// 	return (valid);
+// }
+
+static int	has_unreachable_items(char **map, int height, int width)
 {
-	char	**temp_map;
-	int		y;
-	int 	x;
-	int		valid;
-	int count;
-
-	valid = 1;
-	count = game->total_collectibles;
-
-	temp_map = duplicate_map(game->map, game->height);
-	if (!temp_map)
-		return (0);
-
-	flood_fill(temp_map, game->player_y, game->player_x, &count);
+	int	y;
+	int	x;
 
 	y = 0;
-	while (y < game->height)
+	while (y < height)
 	{
 		x = 0;
-		while (x < game->width)
+		while (x < width)
 		{
-			if (temp_map[y][x] == 'C' || temp_map[y][x] == 'E')
-				valid = 0;
+			if (map[y][x] == 'C' || map[y][x] == 'E')
+				return (1);
 			x++;
 		}
 		y++;
 	}
-	y = 0;
-	while (y < game->height)
-		free(temp_map[y++]);
-	free(temp_map);
+	return (0);
+}
 
-	return (valid);
+static void	free_temp_map(char **map, int height)
+{
+	int	y;
+
+	y = 0;
+	while (y < height)
+		free(map[y++]);
+	free(map);
+}
+
+int	is_map_valid_with_floodfill(t_game *game)
+{
+	char	**temp_map;
+	int		count;
+
+	count = game->total_collectibles;
+	temp_map = duplicate_map(game->map, game->height);
+	if (!temp_map)
+		return (0);
+	flood_fill(temp_map, game->player_y, game->player_x, &count);
+	if (has_unreachable_items(temp_map, game->height, game->width))
+	{
+		free_temp_map(temp_map, game->height);
+		return (0);
+	}
+	free_temp_map(temp_map, game->height);
+	return (1);
 }
