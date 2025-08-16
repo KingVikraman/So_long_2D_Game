@@ -114,43 +114,6 @@ int	validate_map(char **map, t_game *game)
 	return (1);
 }
 
-// int is_map_valid_with_floodfill(t_game *game)
-// {
-// 	char	**temp_map;
-// 	int		y;
-// 	int 	x;
-// 	int		valid;
-// 	int count;
-
-// 	valid = 1;
-// 	count = game->total_collectibles;
-
-// 	temp_map = duplicate_map(game->map, game->height);
-// 	if (!temp_map)
-// 		return (0);
-
-// 	flood_fill(temp_map, game->player_y, game->player_x, &count);
-
-// 	y = 0;
-// 	while (y < game->height)
-// 	{
-// 		x = 0;
-// 		while (x < game->width)
-// 		{
-// 			if (temp_map[y][x] == 'C' || temp_map[y][x] == 'E')
-// 				valid = 0;
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// 	y = 0;
-// 	while (y < game->height)
-// 		free(temp_map[y++]);
-// 	free(temp_map);
-
-// 	return (valid);
-// }
-
 static int	has_unreachable_items(char **map, int height, int width)
 {
 	int	y;
