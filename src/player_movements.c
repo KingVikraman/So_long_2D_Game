@@ -109,56 +109,141 @@ int     idle_check_loop(t_game *game)
     return (0);
 }
 
-void	move_player(t_game *game, int dy, int dx)
+// void	move_player(t_game *game, int dy, int dx)
+// {
+// 	int ny = game->player_y + dy;
+// 	int nx = game->player_x + dx;
+
+// 	//  Bound check
+// 	if (ny < 0 || ny >= game->height || nx < 0 || nx >= game->width)
+// 		return;
+
+// 	//  Wall check
+// 	if (game->map[ny][nx] == '1')
+// 		return;
+
+// 	//  Exit check
+// 	if (game->map[ny][nx] == 'E' && game->collected == game->total_collectibles)
+// 	{
+// 		ft_printf("You won! Game completed in %d moves.\n", game->moves + 1);
+// 		close_window(game);
+// 		return;
+// 	}
+// 	else if (game->map[ny][nx] == 'E')
+// 	{
+// 		ft_printf("Collect all items before exiting!\n");
+// 		return;
+// 	}
+
+// 	//  Update player direction
+// 	if (dy == -1)
+// 		game->player_facing = 'U';
+// 	else if (dy == 1)
+// 		game->player_facing = 'D';
+// 	else if (dx == -1)
+// 		game->player_facing = 'L';
+// 	else if (dx == 1)
+// 		game->player_facing = 'R';
+
+// 	//  Step counter for animation
+// 	game->step_counter++;
+
+// 	//  Collectible check
+// 	check_collectible(game, ny, nx);
+
+// 	//  Update player position
+// 	game->player_x = nx;
+// 	game->player_y = ny;
+// 	game->moves++;
+
+// 	ft_printf("Moves: %d, Collected: %d/%d\n",
+// 		game->moves, game->collected, game->total_collectibles);
+
+// 	//  Redraw everything (calls draw_player() inside render_map)
+// 	render_map(game);
+// }
+
+static char	get_direction(int dy, int dx)
 {
-	int ny = game->player_y + dy;
-	int nx = game->player_x + dx;
+	if (dy == -1) return 'U';
+	if (dy ==  1) return 'D';
+	if (dx == -1) return 'L';
+	if (dx ==  1) return 'R';
+	return 'D'; // default facing down
+}
 
-	//  Bound check
+// void	move_player(t_game *game, int dy, int dx)
+// {
+// 	int ny = game->player_y + dy;
+// 	int nx = game->player_x + dx;
+
+// 	if (ny < 0 || ny >= game->height || nx < 0 || nx >= game->width)
+// 		return;
+// 	if (game->map[ny][nx] == '1')
+// 		return;
+// 	if (game->map[ny][nx] == 'E')
+// 	{
+// 		if (game->collected == game->total_collectibles)
+// 		{
+// 			ft_printf("You won! Game completed in %d moves.\n", game->moves + 1);
+// 			close_window(game);
+// 		}
+// 		else
+// 			ft_printf("Collect all items before exiting!\n");
+// 		return;
+// 	}
+// 	game->player_facing = get_direction(dy, dx);
+// 	game->step_counter++;
+// 	check_collectible(game, ny, nx);
+// 	game->player_x = nx;
+// 	game->player_y = ny;
+// 	game->moves++;
+// 	ft_printf("Moves: %d, Collected: %d/%d\n",
+// 		game->moves, game->collected, game->total_collectibles);
+// 	render_map(game);
+// }
+
+
+static int	is_blocked(t_game *game, int ny, int nx)
+{
 	if (ny < 0 || ny >= game->height || nx < 0 || nx >= game->width)
-		return;
-
-	//  Wall check
+		return (1);
 	if (game->map[ny][nx] == '1')
-		return;
+		return (1);
+	return (0);
+}
 
-	//  Exit check
-	if (game->map[ny][nx] == 'E' && game->collected == game->total_collectibles)
+static int	is_exit(t_game *game, int ny, int nx)
+{
+	if (game->map[ny][nx] != 'E')
+		return (0);
+	if (game->collected == game->total_collectibles)
 	{
 		ft_printf("You won! Game completed in %d moves.\n", game->moves + 1);
 		close_window(game);
-		return;
 	}
-	else if (game->map[ny][nx] == 'E')
-	{
+	else
 		ft_printf("Collect all items before exiting!\n");
-		return;
-	}
+	return (1);
+}
 
-	//  Update player direction
-	if (dy == -1)
-		game->player_facing = 'U';
-	else if (dy == 1)
-		game->player_facing = 'D';
-	else if (dx == -1)
-		game->player_facing = 'L';
-	else if (dx == 1)
-		game->player_facing = 'R';
+void	move_player(t_game *game, int dy, int dx)
+{
+	int	ny;
+	int	nx;
 
-	//  Step counter for animation
+	ny = game->player_y + dy;
+	nx = game->player_x + dx;
+	if (is_blocked(game, ny, nx) || is_exit(game, ny, nx))
+		return ;
+	game->player_facing = get_direction(dy, dx);
 	game->step_counter++;
-
-	//  Collectible check
 	check_collectible(game, ny, nx);
-
-	//  Update player position
 	game->player_x = nx;
 	game->player_y = ny;
 	game->moves++;
-
 	ft_printf("Moves: %d, Collected: %d/%d\n",
 		game->moves, game->collected, game->total_collectibles);
-
-	//  Redraw everything (calls draw_player() inside render_map)
 	render_map(game);
 }
+
