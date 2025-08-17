@@ -1,5 +1,9 @@
 #include "../includes/so_long.h"
 
+void	free_map(char **map);
+void	draw_player(t_game *game);
+int		idle_check_loop(t_game *game);
+
 static	void	*get_idle_sprite(t_game *game)
 {
 	return (game->img_idle);
@@ -43,4 +47,33 @@ void	draw_player(t_game *game)
 		sprite = get_walking_sprite(game);
 	mlx_put_image_to_window(game->mlx, game->win, sprite, game->player_x
 		* TILE_SIZE, game->player_y * TILE_SIZE);
+}
+
+void	free_map(char **map)
+{
+	int	i;
+
+	if (!map)
+		return ;
+	i = 0;
+	while (map[i])
+	{
+		free(map[i]);
+		i++;
+	}
+	free(map);
+}
+
+int	idle_check_loop(t_game *game)
+{
+	struct timeval	now;
+	long			diff;
+
+	gettimeofday(&now, NULL);
+	diff = (now.tv_sec - game->last_input_time.tv_sec) * 1000
+		+ (now.tv_usec - game->last_input_time.tv_usec) / 1000;
+	if (diff > 1000 && !game->is_idle)
+		game->is_idle = 1;
+	render_map(game);
+	return (0);
 }

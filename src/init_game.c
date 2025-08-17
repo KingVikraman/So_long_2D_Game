@@ -1,5 +1,10 @@
 #include "../includes/so_long.h"
 
+int		init_game(t_game *game);
+int		close_window(t_game *game);
+void	init_collected_flags(t_game *game);
+void	check_collectible(t_game *game, int y, int x);
+
 int	init_game(t_game *game)
 {
 	game->mlx = mlx_init();

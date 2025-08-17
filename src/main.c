@@ -1,12 +1,17 @@
 #include "../includes/so_long.h"
 
-static	int	validate_args(int args)
+static	int	validate_args(int argc, char *path)
 {
-	if (args != 2)
+	int	len;
+
+	if (argc != 2)
 	{
 		ft_printf("Error\nUsage: ./so_long maps/map.ber\n");
 		return (0);
 	}
+	len = ft_strlen(path);
+	if (ft_strcmp(".ber", (path + (len - 4))) != 0)
+		return (printf("Error\nUsage : Not a .ber file!\n"), 0);
 	return (1);
 }
 
@@ -41,7 +46,7 @@ static	int	memory_allocation(t_game *game)
 	while (++i < game->height)
 	{
 		game->collected_flags[i] = malloc(sizeof(int) * game->width);
-		if (!game->collected_flags)
+		if (!game->collected_flags[i])
 		{
 			while (--i >= 0)
 				free(game->collected_flags[i]);
@@ -79,7 +84,7 @@ int	main(int argc, char **argv)
 {
 	t_game	game;
 
-	if (!validate_args(argc))
+	if (!validate_args(argc, argv[1]))
 		return (1);
 	if (!init_game_structs(&game, argv[1]))
 		return (1);

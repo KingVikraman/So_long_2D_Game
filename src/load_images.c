@@ -1,5 +1,7 @@
 #include "../includes/so_long.h"
 
+int	load_images(t_game *game);
+
 static	void	load_environment_images(t_game *game, int *w, int *h)
 {
 	game->img_wall = mlx_xpm_file_to_image(game->mlx,

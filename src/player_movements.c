@@ -1,62 +1,7 @@
 #include "../includes/so_long.h"
 
 int		idle_check_loop(t_game *game);
-int		handle_key(int keycode, t_game *game);
 void	move_player(t_game *game, int dy, int dx);
-
-static	void	update_moves(t_game *game)
-{
-	game->is_idle = 0;
-	gettimeofday(&game->last_input_time, NULL);
-}
-
-static	void	handle_movement(int keycode, t_game *game)
-{
-	if (keycode == 119 || keycode == 65362)
-	{
-		update_moves(game);
-		move_player(game, -1, 0);
-	}
-	else if (keycode == 115 || keycode == 65364)
-	{
-		update_moves(game);
-		move_player(game, 1, 0);
-	}
-	else if (keycode == 97 || keycode == 65361)
-	{
-		update_moves(game);
-		move_player(game, 0, -1);
-	}
-	else if (keycode == 100 || keycode == 65363)
-	{
-		update_moves(game);
-		move_player(game, 0, 1);
-	}
-}
-
-int	handle_key(int keycode, t_game *game)
-{
-	gettimeofday(&game->last_input_time, NULL);
-	if (keycode == 65307)
-		close_window(game);
-	else
-		handle_movement(keycode, game);
-	return (0);
-}
-
-int	idle_check_loop(t_game *game)
-{
-	struct timeval	now;
-	long			diff;
-
-	gettimeofday(&now, NULL);
-	diff = (now.tv_sec - game->last_input_time.tv_sec) * 1000
-		+ (now.tv_usec - game->last_input_time.tv_usec) / 1000;
-	if (diff > 1000 && !game->is_idle)
-		game->is_idle = 1;
-	render_map(game);
-	return (0);
-}
 
 static char	get_direction(int dy, int dx)
 {
